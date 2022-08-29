@@ -2,7 +2,14 @@
 module.exports = {
   content: [],
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        multistep: '2px',
+      },
+      colors: {
+        'ui-gray-300': '#D0D5DD',
+      },
+    },
   },
   plugins: [],
 }
