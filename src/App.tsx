@@ -1,12 +1,13 @@
 import React from 'react'
-import logo from './logo.svg'
 import './App.css'
-import { MultistepBar } from './components/ui/MultistepBar'
+import { StepCheckIcon } from './components/ui/multistep-bar/StepCheckIcon'
+import { StepBar } from './components/ui/multistep-bar/StepBar'
+import { MultistepBar } from './components/ui/multistep-bar/MultistepBar'
 
 function App() {
   return (
     <div className="App">
-      <MultistepBar steps='two'/>
+      <MultistepBar steps={2} />
     </div>
   )
 }
