@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
-interface StepCheckIconProps {
+interface MultistepIconProps {
   status: 'active' | 'done' | 'disabled'
 }
 
-export const StepCheckIcon: React.FC<StepCheckIconProps> = ({ status }) => {
+export const MultistepIcon: React.FC<MultistepIconProps> = ({ status }) => {
   const icon = () => {
     switch (status) {
       case 'active':

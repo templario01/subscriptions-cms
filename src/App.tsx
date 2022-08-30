@@ -1,13 +1,12 @@
 import React from 'react'
 import './App.css'
-import { StepCheckIcon } from './components/ui/multistep-bar/StepCheckIcon'
-import { StepBar } from './components/ui/multistep-bar/StepBar'
-import { MultistepBar } from './components/ui/multistep-bar/MultistepBar'
+import { MultistepBar } from './components/ui/multistep-bar/MultistepProgressBar'
 
 function App() {
   return (
     <div className="App">
-      <MultistepBar steps={2} />
+      <MultistepBar size={'large'} phase={'100%'} />
+      <MultistepBar size={'small'} phase={'100%'} />
     </div>
   )
 }
