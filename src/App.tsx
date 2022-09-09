@@ -1,12 +1,17 @@
 import React from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
-import { MultistepBar } from './components/ui/multistep-bar/MultistepProgressBar'
+import { Login } from './components/pages/login/Login'
+
 
 function App() {
   return (
     <div className="App">
-      <MultistepBar size={'large'} phase={'100%'} />
-      <MultistepBar size={'small'} phase={'100%'} />
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />}></Route>
+        </Routes>
+      </Router>
     </div>
   )
 }
