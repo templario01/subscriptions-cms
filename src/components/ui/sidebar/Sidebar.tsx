@@ -11,15 +11,15 @@ export const Sidebar = () => {
         <Logo />
         <SeparatorBar />
         <ul className="relative mt-5">
-          <SidebarItem name="inicio" />
-          <SidebarItem name="cuentas" />
-          <SidebarItem name="plataformas" />
-          <SidebarItem name="clientes" />
+          <SidebarItem name="inicio" routeTo="" />
+          <SidebarItem name="cuentas" routeTo="accounts" />
+          <SidebarItem name="plataformas" routeTo="platforms" />
+          <SidebarItem name="clientes" routeTo="customers" />
         </ul>
       </div>
       <div>
         <ul className="relative mb-5">
-          <SidebarItem name="configuración" />
+          <SidebarItem name="configuración" routeTo="settings" />
         </ul>
         <SeparatorBar />
         <SessionCard />

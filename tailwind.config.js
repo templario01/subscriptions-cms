@@ -19,10 +19,12 @@ module.exports = {
         'form-3': '',
       },
       colors: {
+        'ui-gray-25': '#FCFCFD',
         'ui-gray-100': '#EAECF0',
         'ui-gray-300': '#D0D5DD',
         'ui-gray-700': '#344054',
         'ui-gray-500': '#667085',
+        'ui-primary-200': '#E9D7FE',
         'ui-primary-500': '#8E69DD',
         'ui-primary-600': '#7F56D9',
         'ui-primary-700': '#6941C6',
