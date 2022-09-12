@@ -1,18 +1,22 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import './App.css'
-import { Login } from './components/pages/login/Login'
 
+import { Sidebar } from './components/ui/sidebar/Sidebar'
+import { PagesRoutes } from './routes/PagesRoutes'
 
 function App() {
   return (
-    <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />}></Route>
-        </Routes>
-      </Router>
-    </div>
+    <Router>
+      <div className="App bg-ui-gray-25">
+        <div className="flex">
+          <div className="h-full w-60">
+            <Sidebar />
+          </div>
+          <PagesRoutes />
+        </div>
+      </div>
+    </Router>
   )
 }
 
