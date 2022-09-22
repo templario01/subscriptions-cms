@@ -1,9 +1,10 @@
 import React from 'react'
+import { PageContent } from '../../ui/page-content/PageContent'
 
 export const AccountsPage = () => {
   return (
-    <div>
+    <PageContent>
       <h1>pagina de cuentas</h1>
-    </div>
+    </PageContent>
   )
 }

@@ -7,9 +7,9 @@ interface MultistepBarProps {
   phase: '20%' | '40%' | '60%' | '80%' | '100%'
 }
 
-export const MultistepBar: React.FC<MultistepBarProps> = ({ size, phase }) => {
+export const MultistepProgressBar: React.FC<MultistepBarProps> = ({ size, phase }) => {
   return (
-    <div className="flex flex-row w-full items-center">
+    <div className="flex flex-row w-full items-center justify-evenly">
       {size === 'small' ? (
         <SmallMultistep phase={phase}></SmallMultistep>
       ) : (

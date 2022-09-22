@@ -4,12 +4,16 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      spacing: {
+        76: '312px',
+      },
       fontFamily: {
         inter: ['Inter'],
       },
       height: {
         multistep: '2px',
         line: '1px',
+        76: '312px',
       },
       width: {
         line: '1px',
