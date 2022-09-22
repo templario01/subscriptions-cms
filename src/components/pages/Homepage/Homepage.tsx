@@ -1,9 +1,10 @@
 import React from 'react'
+import { PageContent } from '../../ui/page-content/PageContent'
 
 export const Homepage = () => {
   return (
-    <div>
-      <h1>Pagina de inicio</h1>
-    </div>
+    <PageContent>
+      <h1>pagina de inicio</h1>
+    </PageContent>
   )
 }

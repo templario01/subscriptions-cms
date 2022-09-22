@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { PagesContext, PagesEnum } from './PagesContext'
 
 type PagesProviderProps = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  children: any
+  children?: React.ReactNode
 }
 
 export const PagesProvider: React.FC<PagesProviderProps> = ({ children }) => {

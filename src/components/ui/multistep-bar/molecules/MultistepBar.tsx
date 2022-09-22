@@ -5,5 +5,5 @@ interface MultistepBarProps {
 }
 
 export const MultistepBar: React.FC<MultistepBarProps> = ({ status }) => {
-  return <div className={`${status === 'active' ? 'bg-ui-primary-600' : 'bg-ui-gray-300'} sm:w-16 h-multistep`}></div>
+  return <div className={`${status === 'active' ? 'bg-ui-primary-600' : 'bg-ui-gray-300'} w-full h-multistep`}></div>
 }
