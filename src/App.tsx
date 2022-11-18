@@ -1,17 +1,20 @@
+import { ApolloProvider } from '@apollo/client'
 import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
 import './App.css'
-import { PagesRoutes } from './routes/PagesRoutes'
+import { Home } from './components/pages/Home'
+import { RegisterProvider } from './context/RegisterProvider'
+import { SessionProvider } from './context/SessionProvider'
+import { apolloClient } from './graphql/apolloClient'
 
 function App() {
   return (
-    <Router>
-      <div className="App bg-ui-gray-25">
-        <div className="flex h-full">
-          <PagesRoutes />
-        </div>
-      </div>
-    </Router>
+    <ApolloProvider client={apolloClient}>
+      <SessionProvider>
+        <RegisterProvider>
+          <Home />
+        </RegisterProvider>
+      </SessionProvider>
+    </ApolloProvider>
   )
 }
 

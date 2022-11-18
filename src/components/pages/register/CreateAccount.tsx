@@ -1,8 +1,11 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
+import { RegisterContext, RegisterContextType, StepEnum } from '../../../context/registerContext'
 import { Buttom } from '../../ui/buttoms/Buttom'
 import { InputTextSection } from '../../ui/form/molecules/InputTextSection'
 
 export const CreateAccount = () => {
+  const { setStep } = useContext(RegisterContext) as RegisterContextType
+
   return (
     <Fragment>
       <h1 className="font-bold text-3xl">Crear una cuenta</h1>
@@ -35,7 +38,12 @@ export const CreateAccount = () => {
           onFocus={() => undefined}
         />
       </div>
-      <Buttom description="Continuar"></Buttom>
+      <Buttom
+        handleClick={() => {
+          setStep(StepEnum.TWO)
+        }}
+        description="Continuar"
+      ></Buttom>
     </Fragment>
   )
 }

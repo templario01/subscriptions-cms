@@ -1,11 +1,12 @@
-import React, { Fragment } from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { Fragment, useContext } from 'react'
+import { RegisterContext, RegisterContextType, StepEnum } from '../../../context/registerContext'
 import { LeftArrow } from '../../icons/LeftArrow'
 import { RefreshArrows } from '../../icons/RefreshArrows'
 import { Buttom } from '../../ui/buttoms/Buttom'
 import { SquareInput } from '../../ui/input/SquareInput'
 
 export const VerifyAccount = () => {
+  const { setStep } = useContext(RegisterContext) as RegisterContextType
   return (
     <Fragment>
       <h1 className="font-bold text-3xl">Verificar Correo</h1>
@@ -32,7 +33,7 @@ export const VerifyAccount = () => {
       <Buttom description="Finalizar"></Buttom>
       <div className="flex justify-center items-center gap-2 text-ui-gray-500">
         <LeftArrow />
-        <span className="cursor-pointer" onClick={() => console.log('clic reenviar codigo')}>
+        <span className="cursor-pointer" onClick={() => setStep(StepEnum.ONE)}>
           Regresar a crear cuenta
         </span>
       </div>
