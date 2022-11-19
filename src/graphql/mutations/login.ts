@@ -1,10 +1,13 @@
 import { gql } from '@apollo/client'
 
 export interface LoginUserInput {
-  password: string
-  username: string
+  data: {
+    username: string
+    password: string
+  }
 }
-export interface AccessTokenResponse {
+
+export interface LoginUserResponse {
   login: {
     accessToken: string
     refreshToken: string
@@ -12,7 +15,7 @@ export interface AccessTokenResponse {
 }
 
 export const LOGIN = gql`
-  mutation login($data: LoginUserInput!) {
+  mutation ($data: LoginUserInput!) {
     login(loginUserInput: $data) {
       accessToken
       refreshToken

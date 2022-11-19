@@ -1,30 +1,45 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import logo from '../../../shared/assets/logomark.png'
 import { Buttom } from '../../ui/buttoms/Buttom'
 import { InputTextSection } from '../../ui/form/molecules/InputTextSection'
 import { NavLink, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 import { useMutation } from '@apollo/client'
-import { AccessTokenResponse, LOGIN, LoginUserInput } from '../../../graphql/mutations/login'
-import { SessionContext, SessionContextType } from '../../../context/SessionContext'
+
+import { useAuthDispatch } from '../../../context/AuthProvider'
+import { LOGIN, LoginUserInput, LoginUserResponse } from '../../../graphql/mutations/login'
 
 const validationSchema = {
   username: yup.object({
     validMail: yup.string().required('Ingresa tu correo electronico').email('Ingresa un correo valido'),
   }),
   password: yup.object({
-    validPassword: yup.string().required('Ingresa tu contraseña').min(6, 'Debe ser de un minimo de 6 caracteres'),
+    validPassword: yup.string().required('Ingresa tu contraseña').min(4, 'Debe ser de un minimo de 4 caracteres'),
   }),
 }
 
 export const Login = () => {
-  const { setIsAuth, setToken } = useContext(SessionContext) as SessionContextType
   const [username, setUsername] = useState<string>('')
   const [usernameErrorMessage, setUsernameErrorMessage] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('')
-  const [login] = useMutation<AccessTokenResponse>(LOGIN)
-  const navigate = useNavigate()
+
+  const [login, { error, data }] = useMutation<LoginUserResponse, LoginUserInput>(LOGIN)
+  const authDispatch = useAuthDispatch()
+
+  const handleLogin = async () => {
+    await login({
+      variables: {
+        data: { username, password },
+      },
+    })
+    authDispatch({ type: 'login', token: data?.login.accessToken })
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    }
+  }
 
   const usernameHandleFocusOut = async () => {
     const usernameValidation = await validationSchema.username.validate({ validMail: username }).catch((err) => {
@@ -60,22 +75,6 @@ export const Login = () => {
 
   const passwordHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
-  }
-
-  const handleLogin = async () => {
-    const request: LoginUserInput = {
-      username,
-      password,
-    }
-    const { data } = await login({ variables: { data: request } })
-    const refreshToken = data?.login?.refreshToken as string
-    const accessToken = data?.login?.accessToken as string
-
-    localStorage.setItem('refresh_token', refreshToken)
-    localStorage.setItem('access_token', accessToken)
-    setToken(refreshToken)
-    setIsAuth(true)
-    navigate('/cms')
   }
 
   return (
