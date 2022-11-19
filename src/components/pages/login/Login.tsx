@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '../../../shared/assets/logomark.png'
 import { Buttom } from '../../ui/buttoms/Buttom'
 import { InputTextSection } from '../../ui/form/molecules/InputTextSection'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate  } from 'react-router-dom'
 import * as yup from 'yup'
 import { useMutation } from '@apollo/client'
 
-import { useAuthDispatch } from '../../../context/AuthProvider'
+import { useAuthDispatch, useAuthState } from '../../../context/AuthProvider'
 import { LOGIN, LoginUserInput, LoginUserResponse } from '../../../graphql/mutations/login'
 
 const validationSchema = {
@@ -23,17 +23,25 @@ export const Login = () => {
   const [usernameErrorMessage, setUsernameErrorMessage] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('')
-
-  const [login, { error, data }] = useMutation<LoginUserResponse, LoginUserInput>(LOGIN)
+  const [login, { error }] = useMutation<LoginUserResponse, LoginUserInput>(LOGIN)
   const authDispatch = useAuthDispatch()
+  const auth = useAuthState()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      navigate('/cms')
+    }
+  },[])
 
   const handleLogin = async () => {
-    await login({
+    const { data } = await login({
       variables: {
         data: { username, password },
       },
     })
     authDispatch({ type: 'login', token: data?.login.accessToken })
+    navigate('/cms')
 
     if (error) {
       // eslint-disable-next-line no-console
