@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/templario01/subscriptions-cms/static/css/main.654b85ec.css",
+    "main.js": "/templario01/subscriptions-cms/static/js/main.307d4dc2.js",
+    "static/js/787.55e41fec.chunk.js": "/templario01/subscriptions-cms/static/js/787.55e41fec.chunk.js",
+    "index.html": "/templario01/subscriptions-cms/index.html",
+    "main.654b85ec.css.map": "/templario01/subscriptions-cms/static/css/main.654b85ec.css.map",
+    "main.307d4dc2.js.map": "/templario01/subscriptions-cms/static/js/main.307d4dc2.js.map",
+    "787.55e41fec.chunk.js.map": "/templario01/subscriptions-cms/static/js/787.55e41fec.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.654b85ec.css",
+    "static/js/main.307d4dc2.js"
+  ]
+}
