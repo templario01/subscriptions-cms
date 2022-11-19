@@ -1,9 +1,6 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { RegisterContext, RegisterContextType, StepEnum } from '../../../context/registerContext'
-import { RegisterProvider } from '../../../context/RegisterProvider'
-import { Buttom } from '../../ui/buttoms/Buttom'
-import { InputTextSection } from '../../ui/form/molecules/InputTextSection'
-import { MultistepBarProps, MultistepProgressBar, ProgressEnum } from '../../ui/multistep-bar/MultistepProgressBar'
+import { MultistepProgressBar, ProgressEnum } from '../../ui/multistep-bar/MultistepProgressBar'
 import { CreateAccount } from './CreateAccount'
 import { VerifyAccount } from './VerifyAccount'
 

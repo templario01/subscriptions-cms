@@ -4,6 +4,7 @@ interface ModalProps {
   visible?: boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const Modal: React.FC<ModalProps> = ({ visible }) => {
 
   return (
