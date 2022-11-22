@@ -12,5 +12,3 @@ export type DecodedJwt = {
   iat: number
   exp: number
 }
-
-export type RouteType = 'PRIVATE' | 'PUBLIC' | 'GUEST'
