@@ -1,10 +1,12 @@
 import React from 'react'
+import { useAuthState } from '../../../context/AuthProvider'
 import { Logo } from '../logo/Logo'
 import { SeparatorBar } from '../separator/SeparatorBar'
 import { SessionCard } from '../sesion-card/SessionCard'
 import { SidebarItem } from './SidebarItem'
 
 export const Sidebar = () => {
+  const auth = useAuthState()
   return (
     <div className="px-5 h-full w-76 shadow-md absolute bg-white flex flex-col justify-between">
       <div>
@@ -22,7 +24,7 @@ export const Sidebar = () => {
           <SidebarItem name="configuración" routeTo="cms/settings" />
         </ul>
         <SeparatorBar />
-        <SessionCard />
+        <SessionCard email={auth.email} name='Prime Account' avatar={auth.avatar}/>
       </div>
     </div>
   )

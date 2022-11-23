@@ -6,6 +6,7 @@ const defaultUser: User = {
   email: '',
   isAuthenticated: false,
   token: '',
+  avatar: 'https://robohash.org/goddfefh',
 }
 
 const setToken = (token: string) => {
@@ -39,7 +40,7 @@ export const authenticate = (token?: string): User => {
     return { ...defaultUser }
   }
 
-  return { email: decoded.username, isAuthenticated: true, token: _token }
+  return { email: decoded.username, isAuthenticated: true, token: _token, avatar: decoded.avatar }
 }
 
 export const logout = (): User => {

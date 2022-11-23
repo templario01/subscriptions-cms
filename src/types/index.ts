@@ -2,6 +2,7 @@ export type User = {
   email: string
   token: string
   isAuthenticated: boolean
+  avatar?: string
 }
 
 export type DecodedJwt = {
@@ -11,4 +12,5 @@ export type DecodedJwt = {
   roles: string[]
   iat: number
   exp: number
+  avatar?: string
 }

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import logo from '../../../shared/assets/logomark.png'
 import { Buttom } from '../../ui/buttoms/Buttom'
 import { InputTextSection } from '../../ui/form/molecules/InputTextSection'
-import { NavLink, useNavigate  } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 import { useMutation } from '@apollo/client'
-
 import { useAuthDispatch, useAuthState } from '../../../context/AuthProvider'
 import { LOGIN, LoginUserInput, LoginUserResponse } from '../../../graphql/mutations/login'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 const validationSchema = {
   username: yup.object({
@@ -23,7 +23,8 @@ export const Login = () => {
   const [usernameErrorMessage, setUsernameErrorMessage] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('')
-  const [login, { error }] = useMutation<LoginUserResponse, LoginUserInput>(LOGIN)
+  const [authError, setAuthError] = useState<boolean>(false)
+  const [login, { loading }] = useMutation<LoginUserResponse, LoginUserInput>(LOGIN)
   const authDispatch = useAuthDispatch()
   const auth = useAuthState()
   const navigate = useNavigate()
@@ -32,20 +33,20 @@ export const Login = () => {
     if (auth.isAuthenticated) {
       navigate('/cms')
     }
-  },[])
+  }, [])
 
   const handleLogin = async () => {
-    const { data } = await login({
-      variables: {
-        data: { username, password },
-      },
-    })
-    authDispatch({ type: 'login', token: data?.login.accessToken })
-    navigate('/cms')
-
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.error(error)
+    try {
+      const { data } = await login({
+        variables: {
+          data: { username, password },
+        },
+      })
+      authDispatch({ type: 'login', token: data?.login.accessToken })
+      navigate('/cms')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error) {
+      setAuthError(true)
     }
   }
 
@@ -75,6 +76,7 @@ export const Login = () => {
   const onFocusHandler = () => {
     setUsernameErrorMessage('')
     setPasswordErrorMessage('')
+    setAuthError(false)
   }
 
   const usernameHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,6 +118,19 @@ export const Login = () => {
             onFocus={onFocusHandler}
           />
         </div>
+        {loading && (
+          <div>
+            <ClipLoader color="#7F56D9" cssOverride={{}} size={24} speedMultiplier={1} />
+          </div>
+        )}
+        {authError && (
+          <div
+            className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+            role="alert"
+          >
+            <span className="font-medium">Ups!</span> Usuario o contraseña incorrecta.
+          </div>
+        )}
         <div className="flex flex-row justify-between">
           <div className="flex gap-2">
             <input id="checkbox-item-11" type="checkbox" value="" className="accent-ui-primary-700" />
