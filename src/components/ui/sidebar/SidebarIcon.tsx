@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface NavIconProps {
-  icon: 'configuración' | 'inicio' | 'cuentas' | 'clientes' | 'plataformas'
+  icon: 'configuración' | 'inicio' | 'cuentas' | 'clientes' | 'reportes'
 }
 
 export const NavIcon: React.FC<NavIconProps> = ({ icon }) => {
@@ -51,7 +51,7 @@ export const NavIcon: React.FC<NavIconProps> = ({ icon }) => {
           </svg>
         )
 
-      case 'plataformas':
+      case 'reportes':
         return (
           <svg
             xmlns="http://www.w3.org/2000/svg"

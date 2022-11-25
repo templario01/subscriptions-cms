@@ -82,7 +82,7 @@ export const SessionCard: React.FC<SessionCardProps> = ({ avatar, email = 'examp
               navigate('/login')
             }}
             type="button"
-            className="inline-block px-6 py-2.5 bg-ui-primary-700 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-ui-primary-500 hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+            className="inline-block px-6 py-2.5 bg-ui-primary-700 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-ui-primary-500 hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0  active:shadow-lg transition duration-150 ease-in-out"
             data-bs-dismiss="modal"
           >
             Salir
@@ -90,7 +90,7 @@ export const SessionCard: React.FC<SessionCardProps> = ({ avatar, email = 'examp
           <button
             onClick={closeModal}
             type="button"
-            className="inline-block px-6 py-2.5 bg-ui-gray-500 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-ui-gray-500 hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
+            className="inline-block px-6 py-2.5 bg-ui-gray-400 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-ui-gray-300 hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out ml-1"
           >
             cancelar
           </button>

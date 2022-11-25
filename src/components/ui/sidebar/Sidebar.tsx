@@ -8,14 +8,14 @@ import { SidebarItem } from './SidebarItem'
 export const Sidebar = () => {
   const auth = useAuthState()
   return (
-    <div className="px-5 h-full w-76 shadow-md absolute bg-white flex flex-col justify-between">
+    <div className="px-5 h-full md:w-76 shadow-md absolute bg-white flex flex-col justify-between">
       <div>
         <Logo />
         <SeparatorBar />
         <ul className="relative mt-5">
           <SidebarItem name="inicio" routeTo="cms/home" />
           <SidebarItem name="cuentas" routeTo="cms/accounts" />
-          <SidebarItem name="plataformas" routeTo="cms/platforms" />
+          <SidebarItem name="reportes" routeTo="cms/platforms" />
           <SidebarItem name="clientes" routeTo="cms/customers" />
         </ul>
       </div>
