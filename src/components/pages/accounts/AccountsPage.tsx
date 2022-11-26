@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Plus } from '../../icons/Plus'
 import { Buttom } from '../../ui/buttoms/Buttom'
 import { PageContent } from '../../ui/page-content/PageContent'
@@ -6,6 +6,16 @@ import { TableHeader } from '../../ui/table/header/TableHeader'
 import { RowPlatformTable } from '../../ui/table/rows/RowPlatformTable'
 import Modal from 'react-modal'
 import { Close } from '../../icons/Close'
+import { useQuery } from '@apollo/client'
+import {
+  GetSubscriptionAccountParams,
+  GetSubscriptionAccountResponse,
+  GET_ALL_SUBSCRIPTION_ACCOUNTS,
+  SubscriptionAccount,
+} from '../../../graphql/queries/get-all-suscription-accounts'
+import { parseEnum, platformTitles } from '../../../shared/utils/utils'
+import { SearchInput } from '../../ui/input/SearchInput'
+import { PaginateSection } from '../../ui/paginate-section/PaginateSection'
 
 Modal.setAppElement('#root')
 
@@ -63,7 +73,66 @@ const CreatePlatformAccountModal = ({ closeModal }: { closeModal: () => void }) 
 }
 
 export const AccountsPage = () => {
-  const [modalIsOpen, setIsOpen] = React.useState(false)
+  const { data, fetchMore } = useQuery<GetSubscriptionAccountResponse, GetSubscriptionAccountParams>(
+    GET_ALL_SUBSCRIPTION_ACCOUNTS,
+    {
+      variables: {
+        take: 100,
+      },
+      fetchPolicy: 'cache-and-network',
+    },
+  )
+  const [accounts, setAccounts] = useState<SubscriptionAccount[]>([])
+  const [modalIsOpen, setIsOpen] = useState(false)
+  const [searchName, setSearchName] = useState<string>('')
+  const [endCursor, setEndCursor] = useState<string[]>([])
+
+  useEffect(() => {
+    const getAccounts = data?.getAllSubscriptionAccounts.nodes ?? []
+    setAccounts([...getAccounts])
+    console.log(accounts)
+  }, [data])
+
+  useEffect(() => {
+    setEndCursor([...endCursor, accounts[accounts.length - 1]?.uuid])
+    console.log(endCursor)
+  }, [data])
+
+  useEffect(() => {
+    const refetchData = async () => {
+      const { data } = await fetchMore({
+        variables: {
+          name: searchName,
+          take: 100,
+        },
+      })
+
+      setAccounts([...data.getAllSubscriptionAccounts.nodes])
+      setEndCursor([data?.getAllSubscriptionAccounts.endCursor ?? ''])
+      console.log(endCursor)
+    }
+    refetchData()
+  }, [searchName])
+
+  const handleSearch = async ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchName(value)
+  }
+
+  const handleNext = async () => {
+    console.log(endCursor[endCursor.length - 1])
+    const { data } = await fetchMore({
+      variables: {
+        name: searchName,
+        after: endCursor[endCursor.length - 1],
+        take: 10,
+      },
+    })
+    setAccounts([...data.getAllSubscriptionAccounts.nodes])
+  }
+
+  const handlePrev = async () => {
+    console.log('prev')
+  }
 
   function openModal() {
     setIsOpen(true)
@@ -77,16 +146,6 @@ export const AccountsPage = () => {
   function closeModal() {
     setIsOpen(false)
   }
-
-  const platformTitles = [
-    'plataforma',
-    'cuenta',
-    'contraseña',
-    'precio por perfil',
-    'precio completo',
-    'slots disponibles',
-    'accion',
-  ]
 
   return (
     <PageContent>
@@ -106,95 +165,36 @@ export const AccountsPage = () => {
             </Buttom>
           </div>
         </div>
-
         <div className="mt-3 mb-5">
-          <div className="max-w-sm">
-            <div className="relative flex items-center w-full h-10 rounded-lg focus-within:shadow-lg bg-white overflow-hidden border-line border-ui-gray-100">
-              <div className="grid place-items-center h-full w-12 text-gray-300">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </div>
-
-              <input
-                className="peer h-full w-full outline-none text-sm text-ui-gray-500 pr-2"
-                type="text"
-                id="search"
-                placeholder="Buscar plataforma, cuenta..."
-              />
-            </div>
-          </div>
+          <SearchInput onChange={handleSearch} value={searchName} />
         </div>
         <div className="shadow-md bg-white rounded-sm w-full mt-4">
           <table className="min-w-full leading-normal">
             <TableHeader elements={platformTitles} />
             <tbody>
-              <RowPlatformTable />
-              <RowPlatformTable />
-              <RowPlatformTable />
-              <RowPlatformTable />
-              <RowPlatformTable />
-              <RowPlatformTable />
-              <RowPlatformTable />
-              <RowPlatformTable />
-              <RowPlatformTable />
-              <RowPlatformTable />
+              {accounts?.map((account) => {
+                return (
+                  <RowPlatformTable
+                    accountEmail={account.email}
+                    accountPassword={account.password}
+                    completePrice={account.completePrice}
+                    image={account.platform.logo}
+                    platform={parseEnum(account.platform.name)}
+                    slots={account.slots}
+                    unitPrice={account.slotPrice}
+                    key={account.uuid}
+                  />
+                )
+              })}
             </tbody>
           </table>
         </div>
-        <div className="mt-2">
-          <div className="flex flex-col items-center">
-            <span className="text-sm text-ui-gray-500 dark:text-gray-400">
-              <span className="font-semibold text-ui-gray-700 dark:text-white">Pagina 1</span> de{' '}
-              <span className="font-semibold text-ui-gray-700 dark:text-white">10</span> de{' '}
-              <span className="font-semibold text-ui-gray-700 dark:text-white">100</span> Cuentas
-            </span>
-            <div className="inline-flex mt-2 xs:mt-0">
-              <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-ui-gray-500 rounded-l hover:bg-ui-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                <svg
-                  aria-hidden="true"
-                  className="w-5 h-5 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                Anterior
-              </button>
-              <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-ui-gray-500  border-0 border-l border-gray-400  rounded-r hover:bg-ui-gray-400  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                Siguiente
-                <svg
-                  aria-hidden="true"
-                  className="w-5 h-5 ml-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </div>
+        <div className="mt-4">
+          <PaginateSection
+            handleNext={handleNext}
+            handlePrev={handlePrev}
+            totalCount={data?.getAllSubscriptionAccounts.totalCount}
+          />
         </div>
       </div>
       <Modal
