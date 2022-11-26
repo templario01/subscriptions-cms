@@ -5,5 +5,5 @@ interface PageContentProps {
 }
 
 export const PageContent: React.FC<PageContentProps> = ({ children }) => {
-  return <div className="ml-76 w-full ">{children}</div>
+  return <div className="ml-76 w-full overflow-y-scroll">{children}</div>
 }

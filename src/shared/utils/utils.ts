@@ -18,3 +18,17 @@ export const platformTitles = [
   'slots disponibles',
   'accion',
 ]
+
+export const customStyles = {
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, .45)',
+  },
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+}

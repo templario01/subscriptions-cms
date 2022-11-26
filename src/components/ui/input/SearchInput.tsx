@@ -8,8 +8,8 @@ export interface SearchInputProps {
 export const SearchInput: React.FC<SearchInputProps> = ({ onChange, value }) => {
   return (
     <Fragment>
-      <div className="max-w-sm">
-        <div className="relative flex items-center w-full h-10 rounded-lg focus-within:shadow-lg bg-white overflow-hidden border-line border-ui-gray-100">
+      <div className="sm:w-76">
+        <div className="flex items-center w-full h-10 rounded-lg focus-within:shadow-lg bg-white overflow-hidden border-line border-ui-gray-100">
           <div className="grid place-items-center h-full w-12 text-gray-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"
