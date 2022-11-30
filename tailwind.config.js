@@ -22,7 +22,7 @@ module.exports = {
         line: '1px',
         76: '312px',
         'form-1': '360px',
-        'form-2': '',
+        'form-2': '640px',
         'form-3': '',
       },
       colors: {

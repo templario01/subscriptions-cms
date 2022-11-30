@@ -107,6 +107,7 @@ export const Login = () => {
             inputHandleChange={usernameHandleChange}
             errorMessage={usernameErrorMessage}
             onFocus={onFocusHandler}
+            autocomplete={true}
           />
           <InputTextSection
             label="Contraseña"
@@ -116,6 +117,7 @@ export const Login = () => {
             inputHandleChange={passwordHandleChange}
             errorMessage={passwordErrorMessage}
             onFocus={onFocusHandler}
+            autocomplete={true}
           />
         </div>
         {loading && (

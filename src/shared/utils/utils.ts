@@ -5,8 +5,8 @@ export function capitalizeFirstLetter(word: string) {
 
 export function parseEnum(word: string) {
   const newWord = word.replace('_', ' ')
-  const [firstWord] = newWord.split(' ')
-  return firstWord
+
+  return newWord
 }
 
 export const platformTitles = [

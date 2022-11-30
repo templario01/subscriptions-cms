@@ -26,14 +26,17 @@ export const SearchInput: React.FC<SearchInputProps> = ({ onChange, value }) => 
               />
             </svg>
           </div>
-          <input
-            value={value}
-            onChange={onChange}
-            className="peer h-full w-full outline-none text-sm text-ui-gray-500 pr-2"
-            type="text"
-            id="search"
-            placeholder="Buscar plataforma, cuenta..."
-          />
+          <form action="">
+            <input
+              value={value}
+              onChange={onChange}
+              className="peer h-full w-full outline-none text-sm text-ui-gray-500 pr-2"
+              type="text"
+              id="search"
+              placeholder="Buscar plataforma, cuenta..."
+
+            />
+          </form>
         </div>
       </div>
     </Fragment>

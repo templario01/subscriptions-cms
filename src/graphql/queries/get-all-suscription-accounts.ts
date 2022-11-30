@@ -1,11 +1,6 @@
 import { gql } from '@apollo/client'
+import { Platform } from './get-all-platforms'
 import { IPaginatedResponse } from './paginated-query'
-
-export interface Platform {
-  name: string
-  logo: string
-  uuid: string
-}
 
 export interface SubscriptionAccount {
   slots: number

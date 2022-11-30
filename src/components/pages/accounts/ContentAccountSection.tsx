@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import {
   GetSubscriptionAccountParams,
   GetSubscriptionAccountResponse,
@@ -14,8 +14,10 @@ import Modal from 'react-modal'
 import { TableHeader } from '../../ui/table/header/TableHeader'
 import { RowPlatformTable } from '../../ui/table/rows/RowPlatformTable'
 import { Close } from '../../icons/Close'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import { CreateAccountContext, CreateAccountContextType } from '../../../context/createAccountContext'
+import { Waypoint } from 'react-waypoint'
+import { IFetchMore, IFetchMoreResult } from '../../../graphql/types/apollo-types'
+import ClipLoader from 'react-spinners/SyncLoader'
 Modal.setAppElement('#root')
 
 export interface ContentAccountSectionProps {
@@ -62,19 +64,24 @@ const CreatePlatformAccountModal = ({ closeModal }: { closeModal: () => void }) 
   )
 }
 
-export const ContentAccountSection: React.FC<ContentAccountSectionProps> = ({ isVisible = true, handleCreateAccount }) => {
-  const { data, fetchMore } = useQuery<GetSubscriptionAccountResponse, GetSubscriptionAccountParams>(
+export const ContentAccountSection: React.FC<ContentAccountSectionProps> = ({
+  isVisible = true,
+  handleCreateAccount,
+}) => {
+  const take = 8
+  const [accounts, setAccounts] = useState<SubscriptionAccount[]>([])
+  const [searchName, setSearchName] = useState<string>('')
+  const [isLoadingMore, setLoadingMore] = useState(false)
+  const { data, fetchMore, loading } = useQuery<GetSubscriptionAccountResponse, GetSubscriptionAccountParams>(
     GET_ALL_SUBSCRIPTION_ACCOUNTS,
     {
       variables: {
-        take: 100,
+        take,
       },
       fetchPolicy: 'cache-and-network',
     },
   )
-  const [accounts, setAccounts] = useState<SubscriptionAccount[]>([])
-
-  const [searchName, setSearchName] = useState<string>('')
+  const { newAccount } = useContext(CreateAccountContext) as CreateAccountContextType
 
   useEffect(() => {
     const getAccounts = data?.getAllSubscriptionAccounts.nodes ?? []
@@ -93,7 +100,32 @@ export const ContentAccountSection: React.FC<ContentAccountSectionProps> = ({ is
       setAccounts([...data.getAllSubscriptionAccounts.nodes])
     }
     refetchData()
-  }, [searchName])
+  }, [searchName, newAccount])
+
+  const handleWaypoint = (
+    accounts: GetSubscriptionAccountResponse,
+    fetchMoreAccounts: IFetchMore,
+    step: number,
+  ): void => {
+    const endCursor = accounts.getAllSubscriptionAccounts.endCursor
+    if (endCursor && fetchMoreAccounts) {
+      setLoadingMore(true)
+      fetchMoreAccounts({
+        variables: { take: step, after: endCursor },
+        updateQuery: (prev: GetSubscriptionAccountResponse, { fetchMoreResult }: IFetchMoreResult) => {
+          setLoadingMore(false)
+          if (!fetchMoreResult) {
+            return prev
+          }
+          fetchMoreResult.getAllSubscriptionAccounts.nodes = [
+            ...prev.getAllSubscriptionAccounts.nodes,
+            ...fetchMoreResult.getAllSubscriptionAccounts.nodes,
+          ]
+          return fetchMoreResult
+        },
+      })
+    }
+  }
 
   const handleSearch = async ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
     setSearchName(value)
@@ -101,6 +133,7 @@ export const ContentAccountSection: React.FC<ContentAccountSectionProps> = ({ is
 
   const [modalIsOpen, setIsOpen] = useState(false)
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function openModal() {
     setIsOpen(true)
   }
@@ -136,21 +169,7 @@ export const ContentAccountSection: React.FC<ContentAccountSectionProps> = ({ is
         <div className="mt-3 mb-5 flex justify-between">
           <SearchInput onChange={handleSearch} value={searchName} />
           <div>
-            <span
-              onClick={() => {
-                toast.success('🦄 Wow so easy!', {
-                  position: 'top-right',
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: 'light',
-                })
-              }}
-              className="text-ui-gray-500 dark:text-gray-400 text-base"
-            >
+            <span className="text-ui-gray-500 dark:text-gray-400 text-base">
               Total de registros:{' '}
               <span className="font-semibold text-ui-gray-700 dark:text-white text-lg">
                 &nbsp;
@@ -163,23 +182,34 @@ export const ContentAccountSection: React.FC<ContentAccountSectionProps> = ({ is
           <table className="min-w-full leading-normal">
             <TableHeader elements={platformTitles} />
             <tbody>
-              {accounts?.map((account) => {
+              {accounts?.map((account, index: number) => {
                 return (
-                  <RowPlatformTable
-                    accountEmail={account.email}
-                    accountPassword={account.password}
-                    completePrice={account.completePrice}
-                    image={account.platform.logo}
-                    platform={parseEnum(account.platform.name)}
-                    slots={account.slots}
-                    unitPrice={account.slotPrice}
-                    key={account.uuid}
-                  />
+                  <Fragment key={account.uuid}>
+                    <RowPlatformTable
+                      accountEmail={account.email}
+                      accountPassword={account.password}
+                      completePrice={account.completePrice}
+                      image={account.platform.logo}
+                      platform={parseEnum(account.platform.name)}
+                      slots={account.slots}
+                      unitPrice={account.slotPrice}
+                    />
+                    {index + 1 === data?.getAllSubscriptionAccounts?.nodes.length && (
+                      <Waypoint onEnter={() => handleWaypoint(data, fetchMore, take)} />
+                    )}
+                  </Fragment>
                 )
               })}
             </tbody>
           </table>
         </div>
+
+        {(loading || isLoadingMore) && (
+          <div className=" w-full inline-block text-center my-2">
+            <span className="text-ui-primary-700 font-semibold">Loading</span>
+            <ClipLoader className="ml-2" color="#6941C6" size={6} />
+          </div>
+        )}
         <Modal
           isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
@@ -189,7 +219,6 @@ export const ContentAccountSection: React.FC<ContentAccountSectionProps> = ({ is
         >
           <CreatePlatformAccountModal closeModal={closeModal}></CreatePlatformAccountModal>
         </Modal>
-        <ToastContainer />
       </div>
     </Fragment>
   )

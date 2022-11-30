@@ -2,7 +2,8 @@ import React, { ReactNode } from 'react'
 
 interface ButtomProps {
   description: string
-  handleClick?: () => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleClick?: (e?: any) => void
   children?: ReactNode
 }
 
@@ -11,7 +12,7 @@ export const Buttom: React.FC<ButtomProps> = ({ description, handleClick, childr
     <button
       onClick={handleClick}
       type="submit"
-      className="flex items-center gap-1.5 text-left rounded-lg w-full bg-ui-primary-700 text-white py-2.5 px-4 hover:bg-ui-primary-600"
+      className="flex items-center text-center gap-1.5 justify-center rounded-lg w-full bg-ui-primary-700 text-white py-2.5 px-4 hover:bg-ui-primary-600"
     >
       {children}
       {description}

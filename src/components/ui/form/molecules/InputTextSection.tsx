@@ -8,6 +8,7 @@ interface InputTextSectionProps {
   onFocus?: (e: React.FocusEvent<HTMLInputElement, Element>) => void
   inputHandleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   errorMessage?: string
+  autocomplete?: boolean
 }
 
 export const InputTextSection: React.FC<InputTextSectionProps> = ({
@@ -18,6 +19,7 @@ export const InputTextSection: React.FC<InputTextSectionProps> = ({
   isPassword = false,
   label = 'Example',
   placeholder = '',
+  autocomplete = false,
 }) => {
   return (
     <div className="flex flex-col items-start mb-2">
@@ -30,7 +32,7 @@ export const InputTextSection: React.FC<InputTextSectionProps> = ({
         placeholder={placeholder}
         onBlur={onFocusOut}
         onFocus={onFocus}
-        required
+        autoComplete={autocomplete === true ? 'on' : 'off'}
       />
       {errorMessage?.length > 0 && <span className="text-red-600 text-sm">{errorMessage}</span>}
     </div>
